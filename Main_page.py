@@ -1,7 +1,6 @@
 import flet as ft 
 import time
 import threading
-import tqdm
 import PE_file_extraction
 import RunModel
 import os
@@ -282,7 +281,7 @@ def main(page:ft.Page):
             pridict=RunModel.predicto(r"/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe")
             
             if pridict[0][0]==1:
-                virus.append(file_paths[complete])   change here
+                virus.append(file_paths[complete])   #change here
                 # virus.append(r"/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe")
                 # cl.controls.append(ft.Text("/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe",color="#CCCCCC"))
                 cl.controls.append(ft.Text(f"{file_paths[complete]}", key=str(file_paths[complete])),color="#CCCCCC")
