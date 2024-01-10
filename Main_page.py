@@ -1,6 +1,7 @@
 import flet as ft 
 import time
 import threading
+import tqdm
 import PE_file_extraction
 import RunModel
 import os
@@ -21,27 +22,52 @@ def main(page:ft.Page):
     
     
     virus=[]
-    
+    virus_dic={}
     def delete_virus(e):
-        for i in virus:
-            os.remove(i)
-        popup_continer_1.width=600
-        popup_continer_1.height=230
-        popup_continer_1.bgcolor="green24"
-        popup_continer_1.content=ft.Container(
-            ft.Text("""Congratulations! Your system is now secure.\n(Name of application) has successfully detected and removed a potential threat from your computer.\nYour safety and privacy are our top priorities.\nIf you have any further concerns or questions, feel free to contact our support team.\nThank you for using (Name of application) to keep your system protected!
-                    """,weight=ft.FontWeight.W_600,size=15),
-            width=600,
-            height=230,
-        )
+        for i in cl.controls:
+            if (i.value==True):
+                virus.append(virus_dic[i.label])
+            else:
+                continue
+
+        if virus!=[]:
+            for i in virus:
+                os.remove(i)
+            
+            popup_continer_1.width=600
+            popup_continer_1.height=230
+            popup_continer_1.bgcolor="green24"
+            popup_continer_1.content=ft.Container(
+                ft.Text("""Congratulations! Your system is now secure.\n(Name of application) has successfully detected and removed a potential threat from your computer.\nYour safety and privacy are our top priorities.\nIf you have any further concerns or questions, feel free to contact our support team.\nThank you for using (Name of application) to keep your system protected!
+                        """,weight=ft.FontWeight.W_600,size=15),
+                width=600,
+                height=230,
+            )
+
+        
+      
+        else:
+            popup_continer_1.width=400
+            popup_continer_1.height=200
+            popup_continer_1.bgcolor="red24"
+            popup_continer_1.content=ft.Container(
+                ft.Text("""No Files Selected\nVirus is Still In Your System
+                        """,weight=ft.FontWeight.W_700,size=15,text_align="center"),
+                width=600,
+                height=230,
+                alignment=ft.alignment.center
+            )           
+            
+            
         page.update()
         time.sleep(5)
-
+        virus.clear()
+        cl.controls.clear()
         popup_continer_1.height=0
         popup_continer_1.width=230
-        
         page.update()
-        inside_scan.height=230
+        time.sleep(1)
+        inside_scan.height=230    
         j=0.1
         for i in range(10):
             scan_animation_button.opacity=j
@@ -57,6 +83,8 @@ def main(page:ft.Page):
         time.sleep(0.9)
         inside_scan.height=230
         j=0.1
+        virus.clear()
+        cl.controls.clear()
         for i in range(10):
             scan_animation_button.opacity=j
             page.update()
@@ -90,7 +118,7 @@ def main(page:ft.Page):
         
 
         
-        if(virus==[]):
+        if(cl==[]):
             popup_continer_1.bgcolor="green"
             inside_scan.height=0
             popup_continer_1.content=ft.Text("CONGRAGULATIONS, We didn't Found any virus in this File")
@@ -175,7 +203,6 @@ def main(page:ft.Page):
         global file_loactions
         if e.files is None:
             upload_button.disabled=True 
-            
             page.update()
         else :
             upload_button.disabled=False
@@ -239,11 +266,11 @@ def main(page:ft.Page):
     global progress
     
     file_paths=PE_file_extraction.extract_file_paths()
-    print(file_paths)
     def thread2():
         
         scan_button.disabled=True
-        size=len(file_paths)
+        size=1
+       
         percentage=0
         progress=1
         
@@ -278,13 +305,12 @@ def main(page:ft.Page):
             
             page.update()
             
-            pridict=RunModel.predicto(r"/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe")
             
             if pridict[0][0]==1:
-                virus.append(file_paths[complete])   #change here
-                # virus.append(r"/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe")
-                # cl.controls.append(ft.Text("/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe",color="#CCCCCC"))
-                cl.controls.append(ft.Text(f"{file_paths[complete]}", key=str(file_paths[complete])),color="#CCCCCC")
+                temp=file_paths[complete]
+                temp1=temp.split("/")
+                virus_dic[temp1[-1]]=temp
+                cl.controls.append(ft.Checkbox(label=temp1[-1], value=True))
             complete=complete+1
             
             page.update()
