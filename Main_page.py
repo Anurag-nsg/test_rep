@@ -24,9 +24,8 @@ def main(page:ft.Page):
     virus=[]
     
     def delete_virus(e):
-        os.remove(virus[0])
-        # for i in virus:
-        #     os.remove(i)
+        for i in virus:
+            os.remove(i)
         popup_continer_1.width=600
         popup_continer_1.height=230
         popup_continer_1.bgcolor="green24"
@@ -245,8 +244,7 @@ def main(page:ft.Page):
     def thread2():
         
         scan_button.disabled=True
-        size=1
-        print(size)
+        size=len(file_paths)
         percentage=0
         progress=1
         
@@ -257,7 +255,7 @@ def main(page:ft.Page):
             percentage=int((progress/size)*100)
             
             num=ft.Text(percentage,size=30,weight=ft.FontWeight.W_900)
-            #pridict=RunModel.predicto(file_paths[complete])
+            pridict=RunModel.predicto(file_paths[complete])
             
             scan_button.content= ft.Container(
                 ft.Stack(controls=[
@@ -284,10 +282,10 @@ def main(page:ft.Page):
             pridict=RunModel.predicto(r"/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe")
             
             if pridict[0][0]==1:
-                # virus.append(file_paths[complete])   change here
-                virus.append(r"/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe")
-                cl.controls.append(ft.Text("/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe",color="#CCCCCC"))
-                # cl.controls.append(ft.Text(f"{file_paths[complete]}", key=str(file_paths[complete])))
+                virus.append(file_paths[complete])   change here
+                # virus.append(r"/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe")
+                # cl.controls.append(ft.Text("/Users/anuragnarsingoju/Downloads/2-1 project/exe_files/MilkyTracker.exe",color="#CCCCCC"))
+                cl.controls.append(ft.Text(f"{file_paths[complete]}", key=str(file_paths[complete])),color="#CCCCCC")
             complete=complete+1
             
             page.update()
